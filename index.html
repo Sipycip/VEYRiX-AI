@@ -4,138 +4,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>VEYRiX | AI Assistant</title>
-    <link rel="icon" type="image/png" href="assets/veyrix-logo.png">
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- VEYRiX Logo -->
+    <link rel="icon" type="image/png" href="./veyrix-logo.png">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="./style.css">
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
+
     <div class="app-container">
+
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
+
             <div class="sidebar-header">
+
                 <button class="new-chat-btn" id="newChatBtn">
                     <i data-lucide="plus"></i>
                     <span>New Chat</span>
                 </button>
+
                 <button class="mobile-close-btn" id="mobileCloseBtn">
                     <i data-lucide="x"></i>
                 </button>
+
             </div>
-            
+
             <div class="sidebar-content">
+
                 <div class="chat-history" id="chatHistory">
-                    <div class="history-label">Recent Chats</div>
-                    <!-- Chat items will be injected here -->
+
+                    <div class="history-label">
+                        Recent Chats
+                    </div>
+
+                    <!-- Chat items are added by script.js -->
+
                 </div>
+
             </div>
 
             <div class="sidebar-footer">
+
                 <div class="user-profile">
-                    <div class="avatar">S</div>
-                    <span class="username">Sipycip</span>
+
+                    <div class="avatar">
+                        S
+                    </div>
+
+                    <span class="username">
+                        Sipycip
+                    </span>
+
                 </div>
+
             </div>
+
         </aside>
+
 
         <!-- Main Content -->
         <main class="main-content">
+
+            <!-- Top Header -->
             <header class="top-header">
+
                 <button class="menu-toggle" id="menuToggle">
                     <i data-lucide="panel-left"></i>
                 </button>
+
                 <div class="brand">
-                    <span class="brand-name">VEYRiX</span>
-                    <span class="model-badge">v1.0</span>
+
+                    <span class="brand-name">
+                        VEYRiX
+                    </span>
+
+                    <span class="model-badge">
+                        v1.0
+                    </span>
+
                 </div>
+
                 <div class="header-actions">
-                    <button id="clearChatBtn" title="Clear chat history">
+
+                    <button
+                        id="clearChatBtn"
+                        title="Clear chat history"
+                    >
                         <i data-lucide="trash-2"></i>
                     </button>
+
                 </div>
+
             </header>
+
 
             <!-- Chat Area -->
             <div class="chat-container" id="chatContainer">
+
+                <!-- Welcome Screen -->
                 <div class="welcome-screen" id="welcomeScreen">
+
                     <div class="logo-mark">
-                        <img src="assets/veyrix-logo.png" alt="VEYRiX Logo">
+
+                        <img
+                            src="./veyrix-logo.png"
+                            alt="VEYRiX Logo"
+                        >
+
                     </div>
-                    <h1>How can I assist you today?</h1>
+
+                    <h1>
+                        How can I assist you today?
+                    </h1>
+
+
+                    <!-- Suggestions -->
                     <div class="suggestion-grid">
-                        <button class="suggestion-card" onclick="setInput('Help me brainstorm project ideas')">
+
+                        <button
+                            class="suggestion-card"
+                            onclick="setInput('Help me brainstorm project ideas')"
+                        >
+
                             <i data-lucide="lightbulb"></i>
-                            <span>Brainstorm project ideas</span>
+
+                            <span>
+                                Brainstorm project ideas
+                            </span>
+
                         </button>
-                        <button class="suggestion-card" onclick="setInput('Summarize complex topics')">
+
+
+                        <button
+                            class="suggestion-card"
+                            onclick="setInput('Summarize complex topics')"
+                        >
+
                             <i data-lucide="book-open"></i>
-                            <span>Summarize complex topics</span>
+
+                            <span>
+                                Summarize complex topics
+                            </span>
+
                         </button>
-                        <button class="suggestion-card" onclick="setInput('Write professional emails')">
+
+
+                        <button
+                            class="suggestion-card"
+                            onclick="setInput('Write professional emails')"
+                        >
+
                             <i data-lucide="mail"></i>
-                            <span>Write professional emails</span>
+
+                            <span>
+                                Write professional emails
+                            </span>
+
                         </button>
+
                     </div>
+
                 </div>
-                <div class="message-list" id="messageList">
-                    <!-- Messages will appear here -->
+
+
+                <!-- Messages -->
+                <div
+                    class="message-list"
+                    id="messageList"
+                >
+                    <!-- Messages are added by script.js -->
                 </div>
-                <div class="typing-indicator" id="typingIndicator" style="display: none;">
+
+
+                <!-- Thinking Indicator -->
+                <div
+                    class="typing-indicator"
+                    id="typingIndicator"
+                    style="display: none;"
+                >
+
                     <div class="ai-avatar">
-                        <img src="assets/veyrix-logo.png" alt="VEYRiX">
-                    <div class="indicator-content">
-                        <span>VEYRiX is thinking</span>
-                        <div class="dots">
-                            <span></span><span></span><span></span>
-                        </div>
+
+                        <img
+                            src="./veyrix-logo.png"
+                            alt="VEYRiX"
+                        >
+
                     </div>
+
+                    <div class="indicator-content">
+
+                        <span>
+                            VEYRiX is thinking
+                        </span>
+
+                        <div class="dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                    </div>
+
                 </div>
+
             </div>
+
 
             <!-- Input Section -->
             <footer class="input-section">
+
                 <div class="input-wrapper">
+
                     <div class="composer-container">
-                        <textarea 
-                            id="messageInput" 
-                            placeholder="Message VEYRiX..." 
+
+                        <textarea
+                            id="messageInput"
+                            placeholder="Message VEYRiX..."
                             rows="1"
                         ></textarea>
-                        
+
+
                         <div class="composer-actions">
+
                             <div class="left-actions">
-                                <button class="action-btn" id="micBtn" title="Voice Input">
+
+                                <!-- Microphone -->
+                                <button
+                                    class="action-btn"
+                                    id="micBtn"
+                                    title="Voice Input"
+                                >
                                     <i data-lucide="mic"></i>
                                 </button>
-                                <button class="action-btn" title="Upload File">
+
+
+                                <!-- File Upload -->
+                                <button
+                                    class="action-btn"
+                                    id="uploadBtn"
+                                    title="Upload File"
+                                >
                                     <i data-lucide="paperclip"></i>
                                 </button>
+
                             </div>
-                            <button class="send-btn" id="sendBtn" disabled>
+
+
+                            <!-- Send -->
+                            <button
+                                class="send-btn"
+                                id="sendBtn"
+                                disabled
+                            >
                                 <i data-lucide="arrow-up"></i>
                             </button>
+
                         </div>
+
                     </div>
-                    <p class="disclaimer">VEYRiX can make mistakes. Verify important information.</p>
+
+
+                    <p class="disclaimer">
+                        VEYRiX can make mistakes. Verify important information.
+                    </p>
+
                 </div>
+
             </footer>
+
         </main>
+
     </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/script.js"></script>
+
+    <!-- VEYRiX API -->
+    <script src="./api.js"></script>
+
+    <!-- VEYRiX Frontend Logic -->
+    <script src="./script.js"></script>
+
+
+    <!-- Initialize Icons + Suggestions -->
     <script>
-        // Initialize Lucide icons
+
         lucide.createIcons();
-        
-        // Global helper for suggestions
+
+
         function setInput(text) {
-            const input = document.getElementById('messageInput');
+
+            const input =
+                document.getElementById("messageInput");
+
             input.value = text;
-            input.dispatchEvent(new Event('input'));
+
+            input.dispatchEvent(
+                new Event("input")
+            );
+
             input.focus();
+
         }
+
     </script>
+
 </body>
 </html>
