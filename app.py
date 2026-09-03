@@ -1,9 +1,25 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from uuid import uuid4
 import os
 
 
 app = Flask(__name__)
+
+# ============================================================
+# CORS
+# ============================================================
+
+CORS(
+    app,
+    resources={
+        r"/api/*": {
+            "origins": [
+                "https://sipycip.github.io"
+            ]
+        }
+    }
+)
 
 
 # ============================================================
@@ -32,30 +48,21 @@ def health():
 # Chat API
 # ============================================================
 
-@app.route("/api/chats", methods=["GET"])
-def get_chats():
-    """
-    Return all available chats.
-    """
+@app.route("/api/chats", methods=["GET", "POST"])
+def chats_endpoint():
 
-    result = []
+    if request.method == "GET":
+        result = []
 
-    for chat_id, chat in chats.items():
-        result.append(
-            {
-                "id": chat_id,
-                "name": chat["name"]
-            }
-        )
+        for chat_id, chat in chats.items():
+            result.append(
+                {
+                    "id": chat_id,
+                    "name": chat["name"]
+                }
+            )
 
-    return jsonify(result)
-
-
-@app.route("/api/chats", methods=["POST"])
-def create_chat():
-    """
-    Create a new conversation.
-    """
+        return jsonify(result)
 
     chat_id = str(uuid4())
 
@@ -73,32 +80,40 @@ def create_chat():
     ), 201
 
 
-@app.route("/api/chats/<chat_id>", methods=["GET"])
-def get_chat(chat_id):
-    """
-    Return all messages in a conversation.
-    """
+@app.route("/api/chats/<chat_id>", methods=["GET", "DELETE"])
+def chat_endpoint(chat_id):
 
     chat = chats.get(chat_id)
 
-    if chat is None:
+    if request.method == "GET":
+
+        if chat is None:
+            return jsonify(
+                {
+                    "error": "Chat not found"
+                }
+            ), 404
+
+        return jsonify(chat["messages"])
+
+    if chat_id not in chats:
         return jsonify(
             {
                 "error": "Chat not found"
             }
         ), 404
 
-    return jsonify(chat["messages"])
+    del chats[chat_id]
+
+    return jsonify(
+        {
+            "success": True
+        }
+    )
 
 
 @app.route("/api/chats/<chat_id>/message", methods=["POST"])
 def send_message(chat_id):
-    """
-    Receive a message.
-
-    The AI engine will be connected after the
-    Flask service is successfully deployed.
-    """
 
     chat = chats.get(chat_id)
 
@@ -136,7 +151,6 @@ def send_message(chat_id):
             }
         ), 400
 
-    # Store user message
     chat["messages"].append(
         {
             "role": "user",
@@ -144,21 +158,20 @@ def send_message(chat_id):
         }
     )
 
-    # Automatically name the chat from the first message
     if chat["name"] == "New Chat":
+
         chat["name"] = user_message[:40]
 
         if len(user_message) > 40:
             chat["name"] += "..."
 
-    # Temporary response while the hosted AI engine
-    # is being configured.
+    # Temporary response.
+    # Ollama/Qwen3 will be connected later.
     response = (
         "VEYRiX backend is online, but the AI engine "
         "has not been connected to the Render server yet."
     )
 
-    # Store assistant response
     chat["messages"].append(
         {
             "role": "assistant",
@@ -175,9 +188,6 @@ def send_message(chat_id):
 
 @app.route("/api/chats/<chat_id>/clear", methods=["POST"])
 def clear_chat(chat_id):
-    """
-    Delete all messages from a conversation.
-    """
 
     chat = chats.get(chat_id)
 
@@ -198,34 +208,13 @@ def clear_chat(chat_id):
     )
 
 
-@app.route("/api/chats/<chat_id>", methods=["DELETE"])
-def delete_chat(chat_id):
-    """
-    Completely delete a conversation.
-    """
-
-    if chat_id not in chats:
-        return jsonify(
-            {
-                "error": "Chat not found"
-            }
-        ), 404
-
-    del chats[chat_id]
-
-    return jsonify(
-        {
-            "success": True
-        }
-    )
-
-
 # ============================================================
 # Error Handling
 # ============================================================
 
 @app.errorhandler(404)
 def not_found(error):
+
     return jsonify(
         {
             "error": "Endpoint not found"
@@ -235,6 +224,7 @@ def not_found(error):
 
 @app.errorhandler(500)
 def internal_error(error):
+
     return jsonify(
         {
             "error": "Internal server error"
