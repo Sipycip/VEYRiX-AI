@@ -1,0 +1,9 @@
+{
+  "cloud": {
+    "kind": "astro-react-seed",
+    "version": 1,
+    "routesDir": "src/routes",
+    "styleEntry": "src/styles/global.css",
+    "defaultHydration": "load"
+  }
+}
