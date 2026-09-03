@@ -1,17 +1,9 @@
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request
 from uuid import uuid4
-from pathlib import Path
-
-from veyrix.core import ask_veyrix
+import os
 
 
-BASE_DIR = Path(__file__).resolve().parent
-
-
-app = Flask(
-    __name__,
-    static_folder=None
-)
+app = Flask(__name__)
 
 
 # ============================================================
@@ -22,30 +14,17 @@ chats = {}
 
 
 # ============================================================
-# Website
+# Health Check
 # ============================================================
 
-@app.route("/")
-def index():
-    return send_from_directory(
-        BASE_DIR,
-        "index.html"
-    )
-
-
-@app.route("/css/<path:filename>")
-def css_files(filename):
-    return send_from_directory(
-        BASE_DIR / "css",
-        filename
-    )
-
-
-@app.route("/js/<path:filename>")
-def js_files(filename):
-    return send_from_directory(
-        BASE_DIR / "js",
-        filename
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify(
+        {
+            "status": "online",
+            "service": "VEYRiX API",
+            "version": "0.2"
+        }
     )
 
 
@@ -115,7 +94,10 @@ def get_chat(chat_id):
 @app.route("/api/chats/<chat_id>/message", methods=["POST"])
 def send_message(chat_id):
     """
-    Send a user message to VEYRiX and return the response.
+    Receive a message.
+
+    The AI engine will be connected after the
+    Flask service is successfully deployed.
     """
 
     chat = chats.get(chat_id)
@@ -154,7 +136,7 @@ def send_message(chat_id):
             }
         ), 400
 
-    # Add user message
+    # Store user message
     chat["messages"].append(
         {
             "role": "user",
@@ -169,32 +151,14 @@ def send_message(chat_id):
         if len(user_message) > 40:
             chat["name"] += "..."
 
-    try:
-        # Ask local VEYRiX model
-        response = ask_veyrix(
-            chat["messages"]
-        )
+    # Temporary response while the hosted AI engine
+    # is being configured.
+    response = (
+        "VEYRiX backend is online, but the AI engine "
+        "has not been connected to the Render server yet."
+    )
 
-    except Exception as error:
-        # Remove the user message if the AI failed.
-        chat["messages"].pop()
-
-        print()
-        print("=" * 60)
-        print("VEYRiX BACKEND ERROR")
-        print("=" * 60)
-        print(error)
-        print("=" * 60)
-        print()
-
-        return jsonify(
-            {
-                "error": "VEYRiX could not generate a response.",
-                "details": str(error)
-            }
-        ), 500
-
-    # Store VEYRiX response
+    # Store assistant response
     chat["messages"].append(
         {
             "role": "assistant",
@@ -257,7 +221,7 @@ def delete_chat(chat_id):
 
 
 # ============================================================
-# Error handling
+# Error Handling
 # ============================================================
 
 @app.errorhandler(404)
@@ -279,26 +243,27 @@ def internal_error(error):
 
 
 # ============================================================
-# Start server
+# Start Server
 # ============================================================
 
 if __name__ == "__main__":
+
+    port = int(os.environ.get("PORT", 5000))
+
     print("=" * 60)
     print("VEYRiX AI v0.2")
     print("=" * 60)
     print("Backend: Flask")
-    print("AI Engine: Ollama")
-    print("Model: Qwen3 1.7B")
+    print("Deployment: Render")
+    print("AI Engine: Pending")
     print("API Keys: None")
     print("Memory: Temporary")
     print()
-    print("VEYRiX server starting...")
-    print("Open: http://127.0.0.1:5000")
+    print(f"VEYRiX server starting on port {port}...")
     print("=" * 60)
-    print()
 
     app.run(
-        host="127.0.0.1",
-        port=5000,
+        host="0.0.0.0",
+        port=port,
         debug=False
     )
