@@ -1,305 +1,741 @@
 :root {
-    --bg-main: #0f1115;
-    --bg-sidebar: #16191f;
+    --bg-main: #000000;
+    --bg-sidebar: #000000;
     --bg-input: #1e222a;
     --bg-hover: #262c36;
+
     --accent: #6366f1;
     --accent-glow: rgba(99, 102, 241, 0.2);
+
     --text-main: #e2e8f0;
     --text-muted: #94a3b8;
+
     --border: rgba(255, 255, 255, 0.08);
+
     --sidebar-width: 280px;
     --header-height: 64px;
-    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --transition:
+        all 0.2s cubic-bezier(
+            0.4,
+            0,
+            0.2,
+            1
+        );
 }
+
+
+/* ============================================================
+   GLOBAL
+   ============================================================ */
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    font-family:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
 }
 
 body {
-    background-color: var(--bg-main);
+    background: var(--bg-main);
     color: var(--text-main);
+
     overflow: hidden;
-    height: 100vh;
 }
+
+
+/* ============================================================
+   APP
+   ============================================================ */
 
 .app-container {
-    display: flex;
-    height: 100vh;
     width: 100%;
+    height: 100vh;
+
+    display: flex;
+
+    background: var(--bg-main);
 }
 
-.logo-mark img {
-    width: 64px;
-    height: 64px;
-    object-fit: contain;
-}
 
-/* Sidebar Styling */
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
 .sidebar {
     width: var(--sidebar-width);
-    background-color: var(--bg-sidebar);
-    border-right: 1px solid var(--border);
+    min-width: var(--sidebar-width);
+
+    height: 100vh;
+
     display: flex;
     flex-direction: column;
-    z-index: 100;
-    transition: var(--transition);
+
+    background: var(--bg-sidebar);
+
+    border-right: 1px solid var(--border);
+
+    overflow: hidden;
+
+    position: relative;
+
+    z-index: 200;
+
+    transition:
+        width 0.3s ease,
+        min-width 0.3s ease,
+        transform 0.3s ease,
+        border-color 0.3s ease;
 }
+
+
+/* Desktop sidebar closed */
+
+.sidebar.collapsed {
+    width: 0;
+    min-width: 0;
+
+    border-right-color: transparent;
+}
+
+
+/* ============================================================
+   SIDEBAR HEADER
+   ============================================================ */
 
 .sidebar-header {
     padding: 1rem;
+
     display: flex;
-    justify-content: space-between;
     align-items: center;
+
+    gap: 0.5rem;
 }
+
+
+/* ============================================================
+   NEW CHAT BUTTON
+   ============================================================ */
 
 .new-chat-btn {
     flex: 1;
+
     display: flex;
     align-items: center;
+
     gap: 0.75rem;
+
     padding: 0.75rem 1rem;
-    background-color:black;
-    color: white;
+
+    background: #ffffff;
+    color: #000000;
+
     border: none;
     border-radius: 12px;
+
     font-weight: 600;
+
     cursor: pointer;
+
     transition: var(--transition);
-    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1)
+
+    box-shadow:
+        0 4px 12px
+        rgba(255, 255, 255, 0.08);
 }
 
 .new-chat-btn:hover {
+    background: #eeeeee;
+
     transform: translateY(-1px);
-    filter: brightness(1.1);
 }
+
+.new-chat-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ============================================================
+   MOBILE CLOSE BUTTON
+   ============================================================ */
 
 .mobile-close-btn {
     display: none;
-    background: none;
+
+    width: 36px;
+    height: 36px;
+
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+
     border: none;
+    border-radius: 8px;
+
     color: var(--text-muted);
+
     cursor: pointer;
 }
 
+.mobile-close-btn:hover {
+    background: var(--bg-hover);
+
+    color: var(--text-main);
+}
+
+
+/* ============================================================
+   SIDEBAR CONTENT
+   ============================================================ */
+
 .sidebar-content {
     flex: 1;
+
     overflow-y: auto;
+
     padding: 0.5rem;
 }
 
 .history-label {
-    padding: 1rem 0.5rem 0.5rem;
+    padding:
+        1rem
+        0.5rem
+        0.5rem;
+
     font-size: 0.75rem;
     font-weight: 700;
+
     color: var(--text-muted);
+
     text-transform: uppercase;
+
     letter-spacing: 0.05em;
 }
 
-.chat-item {
+
+/* ============================================================
+   CHAT HISTORY ITEM
+   ============================================================ */
+
+.chat-item,
+.chat-history-item {
     width: 100%;
+
     display: flex;
     align-items: center;
+
     gap: 0.75rem;
+
     padding: 0.75rem;
+
     margin-bottom: 2px;
-    background: none;
-    border: none;
+
+    background: transparent;
+
+    border: 1px solid transparent;
     border-radius: 8px;
+
     color: var(--text-main);
+
     cursor: pointer;
+
     text-align: left;
+
     transition: var(--transition);
 }
 
-.chat-item:hover {
-    background-color: var(--bg-hover);
+.chat-item:hover,
+.chat-history-item:hover {
+    background: var(--bg-hover);
 }
 
-.chat-item.active {
-    background-color: var(--bg-hover);
-    border: 1px solid var(--border);
+.chat-item.active,
+.chat-history-item.active {
+    background: var(--bg-hover);
+
+    border-color: var(--border);
 }
 
+.chat-history-title,
 .chat-item span {
     flex: 1;
+
+    min-width: 0;
+
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
 
-.chat-item .delete-chat {
-    opacity: 0;
+
+/* ============================================================
+   DELETE CHAT BUTTON
+   ============================================================ */
+
+.chat-delete-btn {
+    flex-shrink: 0;
+
+    background: transparent;
+
+    border: none;
+
     color: var(--text-muted);
-    padding: 4px;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    padding: 4px 8px;
+
+    border-radius: 6px;
+
+    opacity: 0;
+
+    transition: 0.2s ease;
 }
 
-.chat-item:hover .delete-chat {
+.chat-history-item:hover
+.chat-delete-btn {
     opacity: 1;
 }
 
+.chat-delete-btn:hover {
+    background: var(--bg-hover);
+
+    color: #ef4444;
+}
+
+
+/* ============================================================
+   SIDEBAR FOOTER
+   ============================================================ */
+
 .sidebar-footer {
     padding: 1rem;
+
     border-top: 1px solid var(--border);
 }
 
 .user-profile {
     display: flex;
     align-items: center;
+
     gap: 0.75rem;
 }
 
 .avatar {
     width: 32px;
     height: 32px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, var(--accent), #818cf8);
+
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+
+    background: #6b7280;
+
+    color: #ffffff;
+
+    border-radius: 8px;
+
     font-size: 0.875rem;
+    font-weight: 700;
 }
 
-/* Main Content */
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+
 .main-content {
     flex: 1;
+
+    min-width: 0;
+    height: 100vh;
+
+    position: relative;
+
     display: flex;
     flex-direction: column;
-    position: relative;
-    min-width: 0;
+
+    overflow: hidden;
+
+    background: var(--bg-main);
 }
+
+
+/* ============================================================
+   TOP HEADER
+   ============================================================ */
 
 .top-header {
     height: var(--header-height);
+
+    flex-shrink: 0;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     padding: 0 1.5rem;
-    background-color: rgba(0, 0, 0, 1);
-    backdrop-filter: blur(10px);
+
+    background: #000000;
+
     border-bottom: 1px solid var(--border);
-    z-index: 50;
+
+    position: relative;
+
+    z-index: 100;
+
+    transition:
+        height 0.4s ease,
+        padding 0.4s ease,
+        border-color 0.4s ease;
 }
 
+
+/* ============================================================
+   HEADER WHEN CHAT STARTS
+   ============================================================ */
+
+/*
+   IMPORTANT:
+   The whole header is NOT opacity: 0.
+
+   That would also hide the sidebar button.
+
+   Instead:
+   - header collapses
+   - brand disappears
+   - clear button disappears
+   - menu button becomes floating
+*/
+
+.top-header.hidden {
+    height: 0;
+
+    padding-top: 0;
+    padding-bottom: 0;
+
+    border-bottom-color: transparent;
+}
+
+
+/* Hide branding */
+
+.top-header.hidden .brand {
+    opacity: 0;
+
+    transform: translateY(-15px);
+
+    pointer-events: none;
+}
+
+
+/* Hide clear chat button */
+
+.top-header.hidden #clearChatBtn {
+    opacity: 0;
+
+    transform: translateY(-15px);
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   SIDEBAR / MENU TOGGLE
+   ============================================================ */
+
 .menu-toggle {
-    background: none;
-    border: none;
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(20, 20, 20, 0.85);
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
     color: var(--text-muted);
+
     cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
+
+    transition: var(--transition);
 }
 
 .menu-toggle:hover {
-    background-color: var(--bg-hover);
+    background: var(--bg-hover);
+
     color: var(--text-main);
 }
+
+
+/*
+   Once header disappears, sidebar toggle
+   floats permanently in upper-left corner.
+*/
+
+.top-header.hidden .menu-toggle {
+    position: fixed;
+
+    top: 14px;
+    left: 14px;
+
+    z-index: 500;
+
+    opacity: 1;
+
+    pointer-events: auto;
+
+    transform: none;
+
+    backdrop-filter: blur(10px);
+
+    box-shadow:
+        0 6px 18px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+/* ============================================================
+   BRAND
+   ============================================================ */
 
 .brand {
     display: flex;
     align-items: center;
+
     gap: 0.5rem;
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
 }
 
 .brand-name {
     font-size: 1.25rem;
     font-weight: 800;
-    font-family: "Nura Medium", sans-serif;
+
+    font-family:
+        "Nura Medium",
+        sans-serif;
+
     letter-spacing: -0.02em;
-    background: linear-gradient(to right, #fff, #94a3b8);
+
+    background:
+        linear-gradient(
+            to right,
+            #ffffff,
+            #94a3b8
+        );
+
     -webkit-background-clip: text;
+    background-clip: text;
+
     -webkit-text-fill-color: transparent;
 }
 
 .model-badge {
     font-size: 0.7rem;
+
     padding: 2px 6px;
+
     background: var(--bg-hover);
+
     border-radius: 4px;
-    color: white;
+
+    color: #ffffff;
+
     font-weight: 700;
 }
 
+
+/* ============================================================
+   CLEAR CHAT
+   ============================================================ */
+
 #clearChatBtn {
-    background: none;
+    background: transparent;
+
     border: none;
+    border-radius: 8px;
+
     color: var(--text-muted);
+
     cursor: pointer;
+
     padding: 8px;
+
+    transition:
+        color 0.2s ease,
+        opacity 0.3s ease,
+        transform 0.3s ease;
 }
 
 #clearChatBtn:hover {
+    background: var(--bg-hover);
+
     color: #ef4444;
 }
 
-/* Chat Area */
-.chat-container {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 2rem;
-}
 
-.welcome-screen {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    text-align: center;
-}
+/* ============================================================
+   LOGO
+   ============================================================ */
 
 .logo-mark {
     width: 64px;
     height: 64px;
-    background: var(--bg-input);
-    border-radius: 20px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    background: transparent;
+
+    border-radius: 20px;
+
     margin-bottom: 1.5rem;
-    color: var(--accent);
-    border: 1px solid var(--border);
+
+    overflow: hidden;
+}
+
+.logo-mark img {
+    width: 56px;
+    height: 56px;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+
+/* ============================================================
+   CHAT CONTAINER
+   ============================================================ */
+
+.chat-container {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    /*
+       Gives room for composer fixed at bottom.
+    */
+
+    padding-bottom: 150px;
+
+    background: var(--bg-main);
+}
+
+
+/* ============================================================
+   WELCOME SCREEN
+   ============================================================ */
+
+.welcome-screen {
+    flex: 1;
+
+    min-height: calc(
+        100vh
+        -
+        var(--header-height)
+        -
+        130px
+    );
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 2rem;
+
+    text-align: center;
 }
 
 .welcome-screen h1 {
     font-size: 2rem;
+
     font-weight: 700;
+
     margin-bottom: 2rem;
 }
 
+
+/* ============================================================
+   SUGGESTIONS
+   ============================================================ */
+
 .suggestion-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    max-width: 800px;
     width: 100%;
+    max-width: 800px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(200px, 1fr)
+        );
+
+    gap: 1rem;
 }
 
 .suggestion-card {
-    background-color: var(--bg-sidebar);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-    text-align: left;
-    cursor: pointer;
-    transition: var(--transition);
     display: flex;
     flex-direction: column;
+
     gap: 0.75rem;
+
+    padding: 1.25rem;
+
+    background: var(--bg-sidebar);
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: var(--transition);
 }
 
 .suggestion-card:hover {
-    background-color: var(--bg-hover);
+    background: var(--bg-hover);
+
     border-color: var(--accent);
+
     transform: translateY(-2px);
 }
 
@@ -309,253 +745,602 @@ body {
 
 .suggestion-card span {
     font-size: 0.875rem;
+
     color: var(--text-muted);
+
     line-height: 1.4;
 }
 
-/* Messages */
+
+/* ============================================================
+   MESSAGE LIST
+   ============================================================ */
+
 .message-list {
-    max-width: 800px;
     width: 100%;
+    max-width: 800px;
+
     margin: 0 auto;
-    padding: 2rem 1rem;
+
+    padding:
+        2rem
+        1rem
+        1rem;
 }
+
+
+/* ============================================================
+   MESSAGE
+   ============================================================ */
 
 .message {
+    width: 100%;
+
     display: flex;
+    align-items: flex-start;
+
     gap: 1.25rem;
+
     margin-bottom: 2.5rem;
-    animation: fadeIn 0.3s ease-out;
+
+    animation:
+        fadeIn
+        0.3s
+        ease-out;
 }
+
+.message-text {
+    flex: 1;
+
+    min-width: 0;
+
+    font-size: 1rem;
+
+    line-height: 1.65;
+
+    color: var(--text-main);
+
+    text-align: left;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   MESSAGE CODE
+   ============================================================ */
+
+.message-text pre {
+    margin: 1rem 0;
+
+    padding: 1rem;
+
+    background: #111318;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    overflow-x: auto;
+
+    white-space: pre-wrap;
+}
+
+.message-text code {
+    font-family:
+        Consolas,
+        Monaco,
+        monospace;
+}
+
+
+/* ============================================================
+   FADE IN
+   ============================================================ */
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
 }
 
-.avatar-container {
-    flex-shrink: 0;
-}
 
-.ai-avatar, .user-avatar {
+/* ============================================================
+   MESSAGE AVATARS
+   ============================================================ */
+
+.message-avatar,
+.ai-avatar,
+.user-avatar {
     width: 36px;
     height: 36px;
-    border-radius: 10px;
+
+    min-width: 36px;
+    min-height: 36px;
+
+    flex-shrink: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    border-radius: 10px;
+
+    overflow: hidden;
 }
 
+
+/* VEYRiX */
+
+.assistant-message
+.message-avatar,
 .ai-avatar {
-    background-color: var(--accent);
-    color: white;
+    background: transparent;
+
+    color: #ffffff;
 }
 
+
+/* USER - GRAY */
+
+.user-message
+.message-avatar,
 .user-avatar {
-    background-color: #475569;
-    color: white;
+    background: #6b7280;
+
+    color: #ffffff;
+
     font-weight: 700;
 }
 
-.message-content {
-    flex: 1;
-    min-width: 0;
+
+/* VEYRiX logo */
+
+.message-avatar img,
+.ai-avatar img {
+    width: 20px !important;
+    height: 20px !important;
+
+    max-width: 20px !important;
+    max-height: 20px !important;
+
+    object-fit: contain;
+
+    display: block;
 }
 
-.message-header {
-    font-size: 0.875rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.message-body {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--text-main);
-    white-space: pre-wrap;
-    word-break: break-word;
-}
+/* ============================================================
+   TYPING INDICATOR
+   ============================================================ */
 
-.message-actions {
-    margin-top: 1rem;
-    display: flex;
-    gap: 0.5rem;
-}
-
-.msg-action-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 6px;
-    transition: var(--transition);
-}
-
-.msg-action-btn:hover {
-    background-color: var(--bg-hover);
-    color: var(--text-main);
-}
-
-.msg-action-btn.speaking {
-    color: var(--accent);
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-/* Typing Indicator */
 .typing-indicator {
-    max-width: 800px;
     width: 100%;
+    max-width: 800px;
+
     margin: 0 auto;
-    padding: 0 1rem 2rem;
+
+    padding:
+        0
+        1rem
+        1.5rem;
+
     display: flex;
+
     gap: 1.25rem;
+
     align-items: center;
 }
 
 .indicator-content {
     display: flex;
     align-items: center;
+
     gap: 0.75rem;
+
     font-size: 0.875rem;
+
     color: var(--text-muted);
 }
 
 .dots {
     display: flex;
+
     gap: 4px;
 }
 
 .dots span {
     width: 4px;
     height: 4px;
-    background-color: var(--text-muted);
+
+    background: var(--text-muted);
+
     border-radius: 50%;
-    animation: dots 1.4s infinite;
+
+    animation:
+        dots
+        1.4s
+        infinite;
 }
 
-.dots span:nth-child(2) { animation-delay: 0.2s; }
-.dots span:nth-child(3) { animation-delay: 0.4s; }
+.dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
 
 @keyframes dots {
-    0%, 80%, 100% { transform: scale(0); }
-    40% { transform: scale(1); }
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
 }
 
-/* Input Area */
+
+/* ============================================================
+   INPUT SECTION
+   ============================================================ */
+
+/*
+   THIS pins the whole typing area
+   to the bottom of main-content.
+*/
+
 .input-section {
-    padding: 0 1.5rem 2rem;
-    background: linear-gradient(to top, var(--bg-main) 60%, transparent);
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 80;
+
+    padding:
+        0.75rem
+        1.5rem
+        1rem;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 0.96) 35%,
+            rgba(0, 0, 0, 0.75) 65%,
+            rgba(0, 0, 0, 0) 100%
+        );
 }
+
+
+/* ============================================================
+   GRADIENT ABOVE INPUT
+   ============================================================ */
+
+.input-section::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: -70px;
+
+    height: 70px;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 0.85)
+        );
+}
+
+
+/* ============================================================
+   INPUT WRAPPER
+   ============================================================ */
 
 .input-wrapper {
+    width: 100%;
     max-width: 800px;
+
     margin: 0 auto;
+
+    position: relative;
+
+    z-index: 2;
 }
 
+
+/* ============================================================
+   COMPOSER
+   ============================================================ */
+
 .composer-container {
-    background-color: var(--bg-input);
+    width: 100%;
+
+    background: var(--bg-input);
+
     border: 1px solid var(--border);
+
     border-radius: 20px;
+
     padding: 0.75rem 1rem;
+
     transition: var(--transition);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+    box-shadow:
+        0 8px 24px
+        rgba(0, 0, 0, 0.24);
 }
 
 .composer-container:focus-within {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-glow);
+    border-color: #ffffff;
+
+    box-shadow:
+        0 0 0 2px
+        var(--accent-glow);
 }
+
+
+/* ============================================================
+   TEXT AREA
+   ============================================================ */
 
 #messageInput {
     width: 100%;
-    background: none;
+
+    display: block;
+
+    background: transparent;
+
     border: none;
-    color: var(--text-main);
-    resize: none;
-    font-size: 1rem;
-    line-height: 1.5;
-    padding: 0.5rem 0;
-    max-height: 200px;
+
     outline: none;
+
+    resize: none;
+
+    color: var(--text-main);
+
+    font-size: 1rem;
+
+    line-height: 1.5;
+
+    padding: 0.5rem 0;
+
+    max-height: 180px;
 }
+
+#messageInput::placeholder {
+    color: var(--text-muted);
+}
+
+
+/* ============================================================
+   COMPOSER ACTIONS
+   ============================================================ */
 
 .composer-actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     margin-top: 0.5rem;
 }
 
 .left-actions {
     display: flex;
+
     gap: 0.25rem;
 }
 
+
+/* ============================================================
+   GENERAL ACTION BUTTONS
+   ============================================================ */
+
 .action-btn {
-    background: none;
+    background: transparent;
+
     border: none;
+
     color: var(--text-muted);
+
     cursor: pointer;
+
     padding: 8px;
+
     border-radius: 10px;
+
     transition: var(--transition);
 }
 
 .action-btn:hover {
-    background-color: var(--bg-hover);
+    background: var(--bg-hover);
+
     color: var(--text-main);
 }
 
-.action-btn.recording {
-    color: #ef4444;
-    background-color: rgba(239, 68, 68, 0.1);
-    animation: recording-pulse 1s infinite;
-}
 
-@keyframes recording-pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
+/* ============================================================
+   MICROPHONE
+   ============================================================ */
 
-.send-btn {
-    background-color: var(--accent);
-    color: white;
+#micBtn {
+    background: transparent;
+
     border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+    color: var(--text-muted);
+
     cursor: pointer;
-    transition: var(--transition);
+
+    padding: 8px;
+
+    border-radius: 10px;
+
+    transition: 0.2s ease;
 }
 
-.send-btn:disabled {
-    background-color: var(--bg-hover);
-    color: var(--text-muted);
+#micBtn:hover {
+    background: var(--bg-hover);
+
+    color: var(--text-main);
+}
+
+#micBtn.active,
+#micBtn.recording {
+    background: #ef4444;
+
+    color: #ffffff;
+
+    animation:
+        recording-pulse
+        1s
+        infinite;
+}
+
+#micBtn.active:hover,
+#micBtn.recording:hover {
+    background: #dc2626;
+}
+
+#micBtn:disabled {
+    opacity: 0.5;
+
     cursor: not-allowed;
 }
 
-.disclaimer {
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 0.75rem;
+
+/* ============================================================
+   MIC PULSE
+   ============================================================ */
+
+@keyframes recording-pulse {
+
+    0% {
+        transform: scale(1);
+
+        box-shadow:
+            0
+            0
+            0
+            0
+            rgba(239, 68, 68, 0.4);
+    }
+
+    50% {
+        transform: scale(1.08);
+
+        box-shadow:
+            0
+            0
+            0
+            6px
+            rgba(239, 68, 68, 0.08);
+    }
+
+    100% {
+        transform: scale(1);
+
+        box-shadow:
+            0
+            0
+            0
+            0
+            rgba(239, 68, 68, 0);
+    }
 }
 
-/* Custom Scrollbar */
+
+/* ============================================================
+   SEND BUTTON
+   ============================================================ */
+
+.send-btn {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--bg-hover);
+
+    color: var(--text-muted);
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: not-allowed;
+
+    transition: 0.2s ease;
+}
+
+.send-btn:disabled {
+    background: var(--bg-hover);
+
+    color: var(--text-muted);
+
+    cursor: not-allowed;
+}
+
+.send-btn.active {
+    background: #ffffff;
+
+    color: #000000;
+
+    cursor: pointer;
+}
+
+.send-btn.active:hover {
+    background: #f1f1f1;
+
+    transform: scale(1.05);
+}
+
+
+/* ============================================================
+   DISCLAIMER
+   ============================================================ */
+
+.disclaimer {
+    margin-top: 0.65rem;
+
+    text-align: center;
+
+    font-size: 0.75rem;
+
+    color: var(--text-muted);
+}
+
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -566,6 +1351,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
     background: var(--border);
+
     border-radius: 10px;
 }
 
@@ -573,28 +1359,98 @@ body {
     background: var(--text-muted);
 }
 
-/* Responsive */
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
 @media (max-width: 768px) {
+
     .sidebar {
         position: fixed;
-        left: -100%;
+
+        left: 0;
         top: 0;
         bottom: 0;
+
+        width: var(--sidebar-width);
+        min-width: var(--sidebar-width);
+
+        transform:
+            translateX(-100%);
+
+        box-shadow:
+            10px
+            0
+            30px
+            rgba(0, 0, 0, 0.4);
     }
+
 
     .sidebar.open {
-        left: 0;
+        transform:
+            translateX(0);
     }
 
-    .mobile-close-btn {
-        display: block;
+
+    /*
+       Desktop collapsed state should
+       not shrink mobile sidebar.
+    */
+
+    .sidebar.collapsed {
+        width: var(--sidebar-width);
+        min-width: var(--sidebar-width);
     }
+
+
+    .mobile-close-btn {
+        display: flex;
+    }
+
 
     .main-content {
         width: 100%;
     }
 
+
+    /*
+       Keep floating sidebar button
+       reachable on mobile too.
+    */
+
+    .top-header.hidden
+    .menu-toggle {
+        top: 12px;
+        left: 12px;
+    }
+
+
     .suggestion-grid {
         grid-template-columns: 1fr;
+    }
+
+
+    .message-list {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+
+    .chat-container {
+        padding-bottom: 145px;
+    }
+
+
+    .input-section {
+        padding:
+            0.6rem
+            0.75rem
+            0.75rem;
+    }
+
+
+    .composer-container {
+        border-radius: 18px;
     }
 }
